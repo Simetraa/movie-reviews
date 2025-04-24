@@ -6,11 +6,9 @@ export function Navbar() {
     return <NavigationMenu>
         <NavigationMenuList>
             <NavigationMenuItem>
-                <Link href="/"  passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                        Home
-                    </NavigationMenuLink>
-                </Link>
+                <NavigationMenuLink href="/" className={navigationMenuTriggerStyle()}>
+                    Home
+                </NavigationMenuLink>
             </NavigationMenuItem>
         </NavigationMenuList>
     </NavigationMenu>
