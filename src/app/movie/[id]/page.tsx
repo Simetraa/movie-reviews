@@ -4,9 +4,8 @@ import { Badge, badgeVariants } from "@/components/ui/badge";
 import Image from "next/image";
 
 import Link from "next/link";
-// app/product/[id]/page.tsx
 import { useParams } from "next/navigation";
-import humanizeDuration, { humanizer } from "humanize-duration"
+import humanizeDuration from "humanize-duration"
 import useSWR from 'swr'
 
 const fetcher = async (url: string) => {
@@ -44,7 +43,7 @@ export default function MoviePage() {
     return <>
         <Navbar></Navbar>
         <h1 className="text-2xl">{detailsData.title}</h1>
-        {detailsData.genres.map((genre: any) => <Link key={genre.id} href={`/genre/${genre.id}`} className={badgeVariants({ variant: "outline" })}>{genre.name}</Link>)}
+        {detailsData.genres.map((genre: Movie) => <Link key={genre.id} href={`/genre/${genre.id}`} className={badgeVariants({ variant: "outline" })}></Link>)}
         <Image alt="movie poster" width="300" height="450" src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2${detailsData.poster_path}`}></Image>
         <Badge>{humanizeDuration(detailsData.runtime * 60 * 1000)}</Badge>
     </>

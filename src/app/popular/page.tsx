@@ -1,10 +1,9 @@
-"use client";
+import { MovieCardHorizontal } from "../components/movie-card-horizontal"
+import fetcher from "../utils/fetcher"
 
-import useSWR from "swr";
-import fetcher from "./utils/fetcher";
-import { MovieCardRow } from "./components/movie-card-row";
+import useSWR from "swr"
 
-export default function Home() {
+export default function PopularPage() {
     const { data: popularData, error: popularError, isLoading: isPopularLoading } = useSWR(
         `https://api.themoviedb.org/3/movie/popular`,
         fetcher
@@ -18,9 +17,9 @@ export default function Home() {
     if (popularError) return <p>Failed to load.</p>
     if (isPopularLoading) return <p>Loading...</p>
 
-
-
     return <>
-        <MovieCardRow movies={popularData.results} seeMorePath={""}></MovieCardRow>
+        {popularData.results.map((movie: Movie) => {
+            <MovieCardHorizontal movie={movie}></MovieCardHorizontal>
+        })}
     </>
 }
