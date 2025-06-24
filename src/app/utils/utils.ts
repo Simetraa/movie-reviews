@@ -1,7 +1,5 @@
-function dateFromString(s: string) {
+export function dateFromString(s: string): Date {
     // 2023-05-26
 
-    return Date.parse(s);
-    
-
+    return new Date(s);
 }

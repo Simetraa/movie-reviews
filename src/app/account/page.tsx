@@ -30,8 +30,6 @@ export default function AccountPage() {
 
     const sessionId = Cookies.get("session_id");
 
-
-
     const { data: accountData, error: accountError, isLoading: isAccountLoading } = useSWR(
         `https://api.themoviedb.org/3/account${memoizedId ? "/" + memoizedId : ""}?session_id=${sessionId}`,
         fetcher,
