@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
-import { Search } from "lucide-react"
+import { Clapperboard, MoveIcon, Navigation, Search } from "lucide-react"
 import { FieldValues, useForm } from "react-hook-form"
 import { HeaderAccountButton } from "./header-account-button"
 
@@ -19,6 +19,11 @@ export function Navbar() {
 
     return <NavigationMenu>
         <NavigationMenuList>
+            <NavigationMenuItem>
+                <NavigationMenuLink href="/" className={navigationMenuTriggerStyle()}>
+                    <span className="flex gap-2"><Clapperboard color="darkred"></Clapperboard>MovieReviews</span>
+                </NavigationMenuLink>
+            </NavigationMenuItem>
             <NavigationMenuItem>
                 <NavigationMenuLink href="/" className={navigationMenuTriggerStyle()}>
                     Home

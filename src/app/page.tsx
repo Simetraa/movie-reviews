@@ -20,7 +20,8 @@ export default function Home() {
 
 
 
-    return <>
+    return <div className="p-4">
+        <h1 className="text-xl">New Releases</h1>
         <MovieCardRow movies={popularData.results} seeMorePath={""}></MovieCardRow>
-    </>
+    </div>
 }
