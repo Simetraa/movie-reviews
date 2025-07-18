@@ -23,7 +23,7 @@ export function HeaderAccountButton() {
     return (
         <NavigationMenuLink href="/account" className="flex flex-row items-center gap-2">
             <Gravatar md5={accountData.avatar.gravatar.hash}></Gravatar>
-            <span>{accountData.username}</span>
+            <span className="hidden md:block">{accountData.username}</span>
         </NavigationMenuLink>
     )
 
