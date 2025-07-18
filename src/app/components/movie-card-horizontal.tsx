@@ -11,8 +11,8 @@ type Props = {
 
 export function MovieCardHorizontal({ movie }: Props) {
     return <Link href={`/movie/${movie.id}`}>
-        <div className="flex max-w-[200px] flex-col shadow-md rounded-md overflow-hidden hover:scale-102 duration-300 h-full">
-            <Image width="500" height="600" alt="" src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}></Image>
+        <div className="flex w-[150px] flex-col shadow-md rounded-md overflow-hidden hover:scale-102 duration-300 h-full">
+            <Image width={500} height={600} alt="" src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}></Image>
             <div className="flex flex-col flex-1 p-2 justify-between min-h-0">
                 <h2 className="text-l font-semibold">{movie.title}</h2>
                 <div className="flex items-center gap-1 justify-evenly mt-2">
