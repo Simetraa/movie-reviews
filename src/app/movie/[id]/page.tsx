@@ -117,7 +117,6 @@ export default function MoviePage() {
 
 
     return <>
-        <div className="px-4 md:px-8 flex flex-col gap-8 w-full">
             <div className="flex-col md:flex-row flex gap-8">
                 <Image className="w-full md:w-[300px]" alt="movie poster" width="300" height="450" src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2${detailsData!.poster_path}`}></Image>
                 <div className="flex flex-col gap-4">
@@ -174,6 +173,5 @@ export default function MoviePage() {
                     ))}
                 </div>
             </div>
-        </div>
     </>
 }
