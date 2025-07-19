@@ -1,7 +1,7 @@
 import { MovieCardHorizontal } from "../components/movie-card-horizontal"
 import fetcher from "../utils/fetcher"
 
-import useSWR from "swr"
+import useSWR from 'swr'
 
 export default function PopularPage() {
     const { data: popularData, error: popularError, isLoading: isPopularLoading } = useSWR(
