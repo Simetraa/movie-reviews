@@ -1,26 +1,22 @@
 "use client"
-import { Navbar } from "@/app/components/nav-main";
 import { Badge, badgeVariants } from "@/components/ui/badge";
 import Image from "next/image";
-import Markdown from 'react-markdown'
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import humanizeDuration from "humanize-duration"
 import useSWR from 'swr'
 import { dateFromString } from "@/app/utils/utils";
-import { Icon, Plus, Star } from "lucide-react";
+import { Plus, Star } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import fetcher from "@/app/utils/fetcher";
 import { CrewCardRow } from "@/app/components/crew-card-row";
 import { useEffect, useState } from "react";
 import { Rating, RatingButton } from "@/components/ui/shadcn-io/rating";
-import { ShowMoreText } from "@/app/components/show-more";
 import Cookies from "js-cookie";
+import { ReviewsWidget } from "@/app/components/reviews-widget";
 
 export default function MoviePage() {
     const { id } = useParams();
-
-
 
     const { data: detailsData, error: detailsError, isLoading: isDetailsLoading } = useSWR<MovieDetails>(
         `https://api.themoviedb.org/3/movie/${id}`,
@@ -35,15 +31,9 @@ export default function MoviePage() {
     //     `https://api.themoviedb.org/3/movie/${id}/images`
     // )
 
-    const { data: reviewsDetails, error: reviewsError, isLoading: isReviewsLoading } = useSWR<PaginatedResponse<Review>>(
-        `https://api.themoviedb.org/3/movie/${id}/reviews`,
-        fetcher
-    )
 
-    const { data: creditsDetails, error: creditsError, isLoading: isCreditsLoading } = useSWR<Credits>(
-        `https://api.themoviedb.org/3/movie/${id}/credits`,
-        fetcher
-    )
+
+
 
     const { data: accountStatesData, error: accountStatesError, isLoading: isAccountStatesLoading } = useSWR<AccountStates>(
         `https://api.themoviedb.org/3/movie/${id}/account_states`,
@@ -72,14 +62,14 @@ export default function MoviePage() {
 
         const url = `https://api.themoviedb.org/3/movie/${id}/rating?session_id=${sessionId}`;
 
-        const res = await fetch(url, {
+        await fetch(url, {
             method: "POST",
             headers: {
                 accept: "application/json",
                 "Content-Type": "application/json;charset=utf-8",
-                Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API}`, // This must be your v4 access token
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API}`,
             },
-            body: JSON.stringify({ value: newRating * 2 }), // Use newRating here
+            body: JSON.stringify({ value: newRating * 2 }),
         });
     }
 
@@ -96,7 +86,7 @@ export default function MoviePage() {
             }
         );
 
-        let accountId = await accountRes.json().then(data => data.id);
+        const accountId = await accountRes.json().then(data => data.id);
 
         console.log("Toggling watchlist for movie ID:", id);
         const url = `https://api.themoviedb.org/3/account/${accountId}/watchlist?session_id=${sessionId}`;
@@ -127,8 +117,8 @@ export default function MoviePage() {
 
 
 
-    if (detailsError) return <p>Failed to load.</p>
-    if (isDetailsLoading) return <p>Loading...</p>
+    if (detailsError || accountStatesError) return <p>Failed to load.</p>
+    if (isDetailsLoading || isAccountStatesLoading) return <p>Loading...</p>
 
 
 
@@ -171,26 +161,11 @@ export default function MoviePage() {
         </div>
         <div className="text-xl">
             <h2>Crew</h2>
-            {creditsError ? <p>Failed to load crew details.</p> : isCreditsLoading ? <p>Loading crew details...</p> : <CrewCardRow members={creditsDetails?.cast!} />}
+            <CrewCardRow id={Number(id)} />
         </div>
         <div className="flex flex-col gap-1">
             <h2 className="text-xl">Reviews</h2>
-            <div className="flex flex-col gap-2">
-                {reviewsDetails?.results.map((review) => (
-                    <div key={review.id} className="p-4 border rounded-md">
-                        <div className="flex items-center gap-2">
-                            <h3 className="text-lg font-semibold">{review.author}</h3>
-                            <Separator orientation="vertical" />
-                            <span className="text text-neutral-700">{dateFromString(review.created_at).toLocaleDateString()}</span>
-                        </div>
-                        <div>
-                            <div className="text-sm text-neutral-700">
-                                <ShowMoreText text={review.content} />
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <ReviewsWidget movieId={Number(id)} />
         </div>
     </>
 }
