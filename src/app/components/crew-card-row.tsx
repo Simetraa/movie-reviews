@@ -1,7 +1,20 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import fetcher from '../utils/fetcher';
+import { Spinner } from '@/components/ui/spinner';
+import useSWR from 'swr';
 
-export function CrewCardRow({ members }: { members: (CastMember)[] }) {
+export function CrewCardRow({ id }: { id: number }) {
+    const { data: creditsDetails, error: creditsError, isLoading: isCreditsLoading } = useSWR<Credits>(
+        `https://api.themoviedb.org/3/movie/${id}/credits`,
+        fetcher
+    )
+
+    const members = creditsDetails?.cast || [];
+
+    if (creditsError) return <p>Failed to load crew details.</p>;
+    if (isCreditsLoading) return <Spinner />;
+
     return (
         <div className="flex flex-row overflow-x-scroll overflow-y-clip gap-x-4">
             {members.map((member: CastMember) => (
