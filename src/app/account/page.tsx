@@ -46,6 +46,6 @@ export default function AccountPage() {
 
     return <>
         <AccountHeader username={accountData.username} avatarHash={accountData.avatar.gravatar.hash}></AccountHeader>
-        <WatchlistRow accountId={String(memoizedId)} sessionId={sessionId!}></WatchlistRow >
+        
     </>
 }

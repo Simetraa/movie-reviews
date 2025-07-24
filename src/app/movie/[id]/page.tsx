@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import humanizeDuration from "humanize-duration"
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { dateFromString } from "@/app/utils/utils";
 import { Plus, Star } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -37,7 +37,11 @@ export default function MoviePage() {
 
     const { data: accountStatesData, error: accountStatesError, isLoading: isAccountStatesLoading } = useSWR<AccountStates>(
         `https://api.themoviedb.org/3/movie/${id}/account_states`,
-        fetcher
+        fetcher,
+        {
+            revalidateOnFocus: true,
+            revalidateIfStale: true,
+        }
     )
 
     useEffect(() => {
@@ -73,9 +77,9 @@ export default function MoviePage() {
         });
     }
 
-    const sessionId = Cookies.get("session_id");
-
     async function handleWatchlistToggle() {
+        const sessionId = Cookies.get("session_id");
+        console.log("Session ID used for watchlist:", sessionId);
         const accountRes = await fetch(
             `https://api.themoviedb.org/3/account?session_id=${sessionId}`,
             {
@@ -86,10 +90,12 @@ export default function MoviePage() {
             }
         );
 
-        const accountId = await accountRes.json().then(data => data.id);
+        const accountData = await accountRes.json();
+        console.log("Account fetch status:", accountRes.status, accountData);
+        const accountId = accountData.id;
 
-        console.log("Toggling watchlist for movie ID:", id);
         const url = `https://api.themoviedb.org/3/account/${accountId}/watchlist?session_id=${sessionId}`;
+        console.log("Watchlist URL:", url);
 
         const res = await fetch(url, {
             method: "POST",
@@ -107,10 +113,12 @@ export default function MoviePage() {
 
         if (res.ok) {
             setWatchlist(!watchlist);
+            await mutate(`https://api.themoviedb.org/3/movie/${id}/account_states`, undefined, { revalidate: true });
         }
 
         if (!res.ok) {
-            console.error("Failed to add to watchlist");
+            const errorBody = await res.json().catch(() => ({}));
+            console.error("Failed to add to watchlist", res.status, url, errorBody);
         }
     }
 
