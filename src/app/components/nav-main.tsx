@@ -5,6 +5,7 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuL
 import { Clapperboard, HomeIcon, ListIcon, Search } from "lucide-react"
 import { FieldValues, useForm } from "react-hook-form"
 import { HeaderAccountButton } from "./header-account-button"
+import Link from "next/link"
 
 export function Navbar() {
     const searchForm = useForm();
@@ -20,16 +21,16 @@ export function Navbar() {
         <NavigationMenu>
             <NavigationMenuList>
                 <NavigationMenuItem>
-                    <NavigationMenuLink href="/" className={navigationMenuTriggerStyle()}>
-                        <span className="flex gap-2 items-center"><Clapperboard color="darkred" /><span className="hidden md:block font-bold text-lg">MovieReviews</span></span>
+                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                        <Link href="/"><span className="flex gap-2 items-center"><Clapperboard color="darkred" /><span className="hidden md:block font-bold text-lg">MovieReviews</span></span></Link>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
+                {/* <NavigationMenuItem>
                     <NavigationMenuLink href="/" className={navigationMenuTriggerStyle()}>
                         <HomeIcon className="md:hidden" />
                         <span className="hidden md:block">Home</span>
                     </NavigationMenuLink>
-                </NavigationMenuItem>
+                </NavigationMenuItem> */}
                 <NavigationMenuItem>
                     <form onSubmit={searchForm.handleSubmit((data) => handleSearch(data))} className="flex gap-1">
                         <Input placeholder="Search..." {...searchForm.register("search")} className="w-full" />
