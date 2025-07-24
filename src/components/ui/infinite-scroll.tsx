@@ -21,7 +21,58 @@ export default function InfiniteScroll({
     reverse,
     children,
 }: InfiniteScrollProps) {
+
     const observer = React.useRef<IntersectionObserver>(null);
+
+    //TEST
+
+    // Ref to the sentinel element at the bottom (or top if reverse) of the content
+    const sentinelRef = React.useRef<HTMLDivElement | null>(null);
+
+    React.useEffect(() => {
+        if (isLoading) return;
+
+        if (observer.current) observer.current.disconnect();
+
+        // Ensure threshold is between 0 and 1; fallback to 1 if invalid
+        const safeThreshold = threshold >= 0 && threshold <= 1 ? threshold : 1;
+        if (threshold < 0 || threshold > 1) {
+            console.warn(
+                'threshold should be between 0 and 1. You exceeded the range. Using default value: 1',
+            );
+        }
+
+        observer.current = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    next();
+                }
+            },
+            { threshold: safeThreshold, root, rootMargin },
+        );
+
+        // Start observing the sentinel element (the trigger point for loading more)
+        if (sentinelRef.current) {
+            observer.current.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (observer.current) observer.current.disconnect();
+        };
+    }, [hasMore, isLoading, next, threshold, root, rootMargin]);
+
+    return (
+        <>
+            {children}
+            <div
+                ref={sentinelRef}
+                style={{ width: '100%', height: 1, marginTop: reverse ? 0 : 10, marginBottom: reverse ? 10 : 0 }}
+            />
+        </>
+    );
+
+
+    /*
     // This callback ref will be called when it is dispatched to an element or detached from an element,
     // or when the callback function changes.
     const observerRef = React.useCallback(
@@ -72,5 +123,6 @@ export default function InfiniteScroll({
                 return React.cloneElement(child, { ref });
             })}
         </>
-    );
+    ); */
+
 }
