@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
-import { Clapperboard, HomeIcon, Search } from "lucide-react"
+import { Clapperboard, HomeIcon, ListIcon, Search } from "lucide-react"
 import { FieldValues, useForm } from "react-hook-form"
 import { HeaderAccountButton } from "./header-account-button"
 
@@ -26,12 +26,8 @@ export function Navbar() {
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                     <NavigationMenuLink href="/" className={navigationMenuTriggerStyle()}>
-                        <HomeIcon className="md:hidden" /><span className="hidden md:block">Home</span>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NavigationMenuLink href="/watchlist" className={navigationMenuTriggerStyle()}>
-                        <span className="hidden md:block">Watchlist</span>
+                        <HomeIcon className="md:hidden" />
+                        <span className="hidden md:block">Home</span>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
