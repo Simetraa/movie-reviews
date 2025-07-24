@@ -21,7 +21,7 @@ export function Navbar() {
             <NavigationMenuList>
                 <NavigationMenuItem>
                     <NavigationMenuLink href="/" className={navigationMenuTriggerStyle()}>
-                        <span className="flex gap-2"><Clapperboard color="darkred" /><span className="hidden md:block font-bold text-lg">MovieReviews</span></span>
+                        <span className="flex gap-2 items-center"><Clapperboard color="darkred" /><span className="hidden md:block font-bold text-lg">MovieReviews</span></span>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
