@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Rating, RatingButton } from "@/components/ui/shadcn-io/rating";
 import Cookies from "js-cookie";
 import { ReviewsWidget } from "@/app/components/reviews-widget";
+import { Button } from "@/components/ui/button";
 
 export default function MoviePage() {
     const { id } = useParams();
@@ -153,9 +154,12 @@ export default function MoviePage() {
                 </div>
                 <p>{detailsData?.overview}</p>
                 <div className="flex gap-8 flex-row">
-                    <button className="bg-red-700 flex self-start p-2 gap-1 items-center justify-center text-white rounded-sm" onClick={handleWatchlistToggle}>
+                    <Button className="" onClick={handleWatchlistToggle}>
                         <Plus />{watchlist ? "Remove from watchlist" : "Add to watchlist"}
-                    </button>
+                    </Button>
+
+
+
                     <div className="flex items-center gap-4">
                         <Rating onChange={handleRatingChange} value={rating}>
                             {Array.from({ length: 5 }).map((_, index) => (
