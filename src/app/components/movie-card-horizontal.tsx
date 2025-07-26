@@ -3,6 +3,7 @@ import { Star } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { dateFromString } from "../utils/utils"
+import { Movie } from "@/types/Movie"
 
 type Props = {
     movie: Movie

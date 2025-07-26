@@ -1,3 +1,4 @@
+import { Movie } from "@/types/Movie";
 import { MovieCard } from "./movie-card";
 import { MovieCardHorizontal } from "./movie-card-horizontal";
 
