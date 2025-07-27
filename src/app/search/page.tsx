@@ -26,9 +26,6 @@ export default function SearchPage() {
     const [hasMore, setHasMore] = useState(true);
     const [results, setResults] = useState<Movie[]>([]);
 
-    const [filteredResults, setFilteredResults] = useState<Movie[]>([]); // gefilterte Ergebnisse
-    const [sortedResults, setSortedResults] = useState<Movie[]>([]);
-
 
     const sortOptions = [
         { label: "Most Popular", value: "popularity.desc" },
@@ -40,7 +37,6 @@ export default function SearchPage() {
 
     const [sortBy, setSortBy] = useState("popularity.desc");
 
-    //Genre Filter
     const allGenres = [
         { id: 28, name: "Action" },
         { id: 12, name: "Adventure" },
@@ -58,13 +54,15 @@ export default function SearchPage() {
     const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
 
 
-    const url = searchQuery
-        ? `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}&page=${page}`
-        : null;
+    const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&page=${page}${
+        searchQuery ? `&with_text_query=${encodeURIComponent(searchQuery)}` : ""
+    }${
+        selectedGenres.length > 0 ? `&with_genres=${selectedGenres.join(",")}` : ""
+    }&sort_by=${sortBy}`;
 
     const { data, error, isLoading } = useSWR<PaginatedResponse<Movie>>(url, fetcher);
 
-    //should append new data when there is new data for a page ( i dont know hwo necesary this will be but its nice to have i guess)
+
     useEffect(() => {
         if (data?.results) {
 
@@ -78,66 +76,12 @@ export default function SearchPage() {
         }
     }, [data, page]);
 
-    //reset everything when new search is made
+
     useEffect(() => {
         setPage(1);
         setResults([]);
-        setFilteredResults([]);
-        setSortedResults([]);
         setHasMore(true);
     }, [searchQueryRaw]);
-
-
-    //client side filtering (for now)
-    useEffect(() => {
-        if (selectedGenres.length === 0) {
-            setFilteredResults(results);
-        } else {
-            setFilteredResults(
-                results.filter((movie) =>
-                    Array.isArray(movie.genre_ids) && movie.genre_ids.some((id) => selectedGenres.includes(id))
-                )
-            );
-        }
-    }, [selectedGenres, results]);
-
-    //client side sorting (for now)
-
-    function sortMovies(movies: Movie[], sortBy: string): Movie[] {
-        const sorted = [...movies];
-        switch (sortBy) {
-            case "popularity.desc":
-                sorted.sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
-                break;
-            case "vote_average.desc":
-                sorted.sort((a, b) => (b.vote_average ?? 0) - (a.vote_average ?? 0));
-                break;
-            case "release_date.desc":
-                sorted.sort((a, b) => {
-                    const dateA = new Date(a.release_date ?? "").getTime();
-                    const dateB = new Date(b.release_date ?? "").getTime();
-                    return dateB - dateA;
-                });
-                break;
-            case "release_date.asc":
-                sorted.sort((a, b) => {
-                    const dateA = new Date(a.release_date ?? "").getTime();
-                    const dateB = new Date(b.release_date ?? "").getTime();
-                    return dateA - dateB;
-                });
-                break;
-            case "vote_average.asc":
-                sorted.sort((a, b) => (a.vote_average ?? 0) - (b.vote_average ?? 0));
-                break;
-            default:
-                break;
-        }
-        return sorted;
-    }
-
-    useEffect(() => {
-        setSortedResults(sortMovies(filteredResults, sortBy));
-    }, [filteredResults, sortBy]);
 
     const loadMore = () => {
         if (hasMore && !isLoading) {
@@ -169,7 +113,7 @@ export default function SearchPage() {
 
         <InfiniteScroll isLoading={isLoading} next={loadMore} hasMore={hasMore}>
             <div className="grid [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] p-4 gap-4">
-                {sortedResults.map((movie) => (
+                {results.map((movie) => (
                     <MovieCardHorizontal key={movie.id} movie={movie} />
                 ))}
             </div>
