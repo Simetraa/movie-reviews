@@ -6,6 +6,7 @@ import { Clapperboard, HomeIcon, ListIcon, Search } from "lucide-react"
 import { FieldValues, useForm } from "react-hook-form"
 import { HeaderAccountButton } from "./header-account-button"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 
 export function Navbar() {
     const searchForm = useForm();
@@ -33,7 +34,7 @@ export function Navbar() {
                 </NavigationMenuItem> */}
                 <NavigationMenuItem>
                     <form onSubmit={searchForm.handleSubmit((data) => handleSearch(data))} className="flex gap-1">
-                        <Input placeholder="Search..." {...searchForm.register("search")} className="w-full" />
+                        <Input placeholder="Search..." {...searchForm.register("search")} className="w-full" defaultValue={useSearchParams().get("q") ?? ""} />
                         <Button className="cursor-pointer" type="submit" variant="secondary" size="icon"><Search /></Button>
                     </form>
                 </NavigationMenuItem>
