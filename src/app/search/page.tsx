@@ -51,7 +51,7 @@ export default function SearchPage() {
     const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
 
 
-    const url = `https://api.themoviedb.org/3/discover/movie?page=${page}${searchQuery ? `&with_text_query=${encodeURIComponent(searchQuery)}` : ""
+    const url = `https://api.themoviedb.org/3/discover/movie?page=${page}${searchQuery ? `&with_text_query=${searchQuery}` : ""
         }${selectedGenres.length > 0 ? `&with_genres=${selectedGenres.join(",")}` : ""
         }&sort_by=${sortBy}`;
 
