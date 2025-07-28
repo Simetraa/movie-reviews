@@ -55,19 +55,16 @@ export default function MoviePage() {
         }
     }, [accountStatesData]);
 
-
-
     async function handleRatingChange(
-        event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
+        _event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
         newRating: number
     ) {
         setRating(newRating);
 
         const sessionId = Cookies.get("session_id");
-
         const url = `https://api.themoviedb.org/3/movie/${id}/rating?session_id=${sessionId}`;
 
-        await fetch(url, {
+        const res = await fetch(url, {
             method: "POST",
             headers: {
                 accept: "application/json",
@@ -76,6 +73,16 @@ export default function MoviePage() {
             },
             body: JSON.stringify({ value: newRating * 2 }),
         });
+
+        if (res.ok) {
+            mutate(
+                `https://api.themoviedb.org/3/movie/${id}/account_states`,
+                { ...accountStatesData, rated: { value: newRating * 2 } },
+                false
+            );
+
+            mutate(`https://api.themoviedb.org/3/movie/${id}/account_states`);
+        }
     }
 
     async function handleWatchlistToggle() {
@@ -114,7 +121,12 @@ export default function MoviePage() {
 
         if (res.ok) {
             setWatchlist(!watchlist);
-            await mutate(`https://api.themoviedb.org/3/movie/${id}/account_states`, undefined, { revalidate: true });
+            mutate(
+                `https://api.themoviedb.org/3/movie/${id}/account_states`,
+                { ...accountStatesData, watchlist: !watchlist },
+                false
+            );
+            mutate(`https://api.themoviedb.org/3/movie/${id}/account_states`);
         }
 
         if (!res.ok) {
