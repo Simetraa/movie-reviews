@@ -16,8 +16,7 @@ import { Badge } from "@/components/ui/badge";
 
 export default function SearchPage() {
     const searchParams = useSearchParams();
-    const searchQueryRaw = searchParams.get("q") ?? "";
-    const searchQuery = encodeURIComponent(searchQueryRaw);
+    const searchQuery = searchParams.get("q") ?? "";
 
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -51,12 +50,20 @@ export default function SearchPage() {
     const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
 
 
-    const url = `https://api.themoviedb.org/3/discover/movie?page=${page}${searchQuery ? `&with_text_query=${searchQuery}` : ""
-        }${selectedGenres.length > 0 ? `&with_genres=${selectedGenres.join(",")}` : ""
-        }&sort_by=${sortBy}`;
+    const url = new URL("https://api.themoviedb.org/3/discover/movie")
+    url.searchParams.append("page", page.toString());
+    if (searchQuery) {
+        url.searchParams.append("with_text_query", searchQuery);
+    }
+    if (selectedGenres.length > 0) {
+        url.searchParams.append("with_genres", selectedGenres.join(","));
+    }
+    url.searchParams.append("sort_by", sortBy);
 
-    const { data, error, isLoading } = useSWR<PaginatedResponse<Movie>>(url, fetcher);
+    const swrKey = url.toString();
 
+
+    const { data, error, isLoading } = useSWR<PaginatedResponse<Movie>>(swrKey, fetcher);
 
     useEffect(() => {
         if (data?.results) {
@@ -76,7 +83,7 @@ export default function SearchPage() {
         setPage(1);
         setResults([]);
         setHasMore(true);
-    }, [searchQueryRaw]);
+    }, [searchQuery]);
 
     const loadMore = () => {
         if (hasMore && !isLoading) {
