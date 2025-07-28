@@ -14,10 +14,6 @@ import { Movie } from "@/types/Movie";
 
 
 export default function SearchPage() {
-
-    const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-
-
     const searchParams = useSearchParams();
     const searchQueryRaw = searchParams.get("q") ?? "";
     const searchQuery = encodeURIComponent(searchQueryRaw);
@@ -54,11 +50,9 @@ export default function SearchPage() {
     const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
 
 
-    const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&page=${page}${
-        searchQuery ? `&with_text_query=${encodeURIComponent(searchQuery)}` : ""
-    }${
-        selectedGenres.length > 0 ? `&with_genres=${selectedGenres.join(",")}` : ""
-    }&sort_by=${sortBy}`;
+    const url = `https://api.themoviedb.org/3/discover/movie?page=${page}${searchQuery ? `&with_text_query=${encodeURIComponent(searchQuery)}` : ""
+        }${selectedGenres.length > 0 ? `&with_genres=${selectedGenres.join(",")}` : ""
+        }&sort_by=${sortBy}`;
 
     const { data, error, isLoading } = useSWR<PaginatedResponse<Movie>>(url, fetcher);
 
@@ -111,14 +105,14 @@ export default function SearchPage() {
 
 
 
-        <InfiniteScroll isLoading={isLoading} next={loadMore} hasMore={hasMore}>
-            <div className="grid [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] p-4 gap-4">
-                {results.map((movie) => (
-                    <MovieCardHorizontal key={movie.id} movie={movie} />
-                ))}
-            </div>
-            {isLoading && <Spinner />}
-        </InfiniteScroll>
+            <InfiniteScroll isLoading={isLoading} next={loadMore} hasMore={hasMore}>
+                <div className="grid [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] p-4 gap-4">
+                    {results.map((movie) => (
+                        <MovieCardHorizontal key={movie.id} movie={movie} />
+                    ))}
+                </div>
+                {isLoading && <Spinner />}
+            </InfiniteScroll>
         </>
     );
 }
