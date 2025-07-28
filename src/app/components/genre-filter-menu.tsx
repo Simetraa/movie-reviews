@@ -6,6 +6,7 @@ import {
     DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface Genre {
     id: number;
@@ -19,10 +20,10 @@ interface GenreFilterMenuProps {
 }
 
 export default function GenreFilterMenu({
-     genres,
-     selectedGenres,
-     onChange,
-     }: GenreFilterMenuProps) {
+    genres,
+    selectedGenres,
+    onChange,
+}: GenreFilterMenuProps) {
     const toggleGenre = (id: number) => {
         if (selectedGenres.includes(id)) {
             onChange(selectedGenres.filter((g) => g !== id));
@@ -38,6 +39,7 @@ export default function GenreFilterMenu({
             <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-48 justify-between">
                     Genres
+                    <div className="overflow-hidden">{selectedGenres.map((id) => <Badge key={id} className="mr-2">{genres.find(g => g.id === id)?.name}</Badge>)}</div>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48 max-h-60 overflow-y-auto">

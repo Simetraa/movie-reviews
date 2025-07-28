@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import GenreFilterMenu from "../components/genre-filter-menu";
 import SortByMenu from "../components/sort-by-menu";
 import { Movie } from "@/types/Movie";
+import { Badge } from "@/components/ui/badge";
 
 
 
@@ -90,7 +91,7 @@ export default function SearchPage() {
 
     return (
         <>
-            <div className="flex flex-wrap gap-4 items-center p-4">
+            <div className="flex flex-wrap gap-4 items-center">
                 <GenreFilterMenu
                     genres={allGenres}
                     selectedGenres={selectedGenres}
@@ -102,8 +103,6 @@ export default function SearchPage() {
                     onChange={setSortBy}
                 />
             </div>
-
-
 
             <InfiniteScroll isLoading={isLoading} next={loadMore} hasMore={hasMore}>
                 <div className="grid [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] p-4 gap-4">
