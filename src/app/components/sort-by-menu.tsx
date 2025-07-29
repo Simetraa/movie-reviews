@@ -6,8 +6,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {Button} from "@/components/ui/button";
-import {Badge} from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface SortOption {
     label: string;
@@ -21,10 +21,10 @@ interface SortByMenuProps {
 }
 
 export default function SortByMenu({
-    options,
-    selectedSort,
-    onChange,
-}: SortByMenuProps) {
+                                       options,
+                                       selectedSort,
+                                       onChange,
+                                   }: SortByMenuProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -35,7 +35,7 @@ export default function SortByMenu({
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48 max-h-60 overflow-y-auto">
                 <DropdownMenuLabel>Sort By</DropdownMenuLabel>
-                {options.map(({ label, value }) => (
+                {options.map(({label, value}) => (
                     <DropdownMenuItem
                         key={value}
                         onSelect={(e) => {

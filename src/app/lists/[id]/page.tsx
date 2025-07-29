@@ -2,18 +2,18 @@
 
 import useSWR from "swr";
 import fetcher from "@/app/utils/fetcher";
-import {useParams} from "next/navigation";
-import {useEffect, useState} from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import InfiniteScroll from "@/components/ui/infinite-scroll";
-import {MovieCardHorizontal} from "@/app/components/movie-card-horizontal";
-import {ListDetails, ListItem} from "@/types/ListDetails";
+import { MovieCardHorizontal } from "@/app/components/movie-card-horizontal";
+import { ListDetails, ListItem } from "@/types/ListDetails";
 
 
 export default function ListPage() {
-    const { id } = useParams();
+    const {id} = useParams();
 
-    const { data, error, isLoading } = useSWR<ListDetails>(
-        id? `https://api.themoviedb.org/3/list/${id}` : null,
+    const {data, error, isLoading} = useSWR<ListDetails>(
+        id ? `https://api.themoviedb.org/3/list/${id}` : null,
         fetcher
     )
 
@@ -58,7 +58,7 @@ export default function ListPage() {
             >
                 <div className="grid gap-4">
                     {visibleItems.map((movie) => (
-                        <MovieCardHorizontal key={movie.id} movie={movie} />
+                        <MovieCardHorizontal key={movie.id} movie={movie}/>
                     ))}
                 </div>
             </InfiniteScroll>

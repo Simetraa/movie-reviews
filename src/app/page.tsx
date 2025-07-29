@@ -1,7 +1,7 @@
 "use client";
 
 
-import {MovieCardRow} from "./components/movie-card-row";
+import { MovieCardRow } from "./components/movie-card-row";
 import Link from "next/link";
 
 export default function Home() {
@@ -11,7 +11,8 @@ export default function Home() {
                 <div>
                     <Link href="/trending"><h1 className="text-xl">Trending Movies</h1></Link>
                 </div>
-                <MovieCardRow url="https://api.themoviedb.org/3/trending/movie/day" seeMorePath={"/trending"}></MovieCardRow>
+                <MovieCardRow url="https://api.themoviedb.org/3/trending/movie/day"
+                              seeMorePath={"/trending"}></MovieCardRow>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -20,12 +21,13 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-2">
                 <Link href="/upcoming"><h1 className="text-xl">Upcoming Movies</h1></Link>
-                <MovieCardRow url="https://api.themoviedb.org/3/movie/upcoming" seeMorePath={"/upcoming"}></MovieCardRow>
+                <MovieCardRow url="https://api.themoviedb.org/3/movie/upcoming"
+                              seeMorePath={"/upcoming"}></MovieCardRow>
             </div>
             <div className="flex flex-col gap-2">
                 <Link href="/top"><h1 className="text-xl">Top Movies</h1></Link>
                 <MovieCardRow url="https://api.themoviedb.org/3/movie/top_rated" seeMorePath={"/top"}></MovieCardRow>
-            </div >
+            </div>
         </div>
     </>
 }

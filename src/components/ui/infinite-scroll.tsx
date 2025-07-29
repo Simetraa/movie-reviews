@@ -12,15 +12,15 @@ interface InfiniteScrollProps {
 }
 
 export default function InfiniteScroll({
-    isLoading,
-    hasMore,
-    next,
-    threshold = 1,
-    root = null,
-    rootMargin = '0px',
-    reverse,
-    children,
-}: InfiniteScrollProps) {
+                                           isLoading,
+                                           hasMore,
+                                           next,
+                                           threshold = 1,
+                                           root = null,
+                                           rootMargin = '0px',
+                                           reverse,
+                                           children,
+                                       }: InfiniteScrollProps) {
 
     const observer = React.useRef<IntersectionObserver>(null);
 
@@ -44,7 +44,7 @@ export default function InfiniteScroll({
                     next();
                 }
             },
-            { threshold: safeThreshold, root, rootMargin },
+            {threshold: safeThreshold, root, rootMargin},
         );
 
         if (sentinelRef.current) {
@@ -61,7 +61,7 @@ export default function InfiniteScroll({
             {children}
             <div
                 ref={sentinelRef}
-                style={{ width: '100%', height: 1, marginTop: reverse ? 0 : 10, marginBottom: reverse ? 10 : 0 }}
+                style={{width: '100%', height: 1, marginTop: reverse ? 0 : 10, marginBottom: reverse ? 10 : 0}}
             />
         </>
     );

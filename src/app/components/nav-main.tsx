@@ -1,6 +1,6 @@
 "use client"
-import {Button} from "@/components/ui/button"
-import {Input} from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -8,11 +8,11 @@ import {
     NavigationMenuList,
     navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu"
-import {Clapperboard, Search} from "lucide-react"
-import {FieldValues, useForm} from "react-hook-form"
-import {HeaderAccountButton} from "./header-account-button"
+import { Clapperboard, Search } from "lucide-react"
+import { FieldValues, useForm } from "react-hook-form"
+import { HeaderAccountButton } from "./header-account-button"
 import Link from "next/link"
-import {useSearchParams} from "next/navigation"
+import { useSearchParams } from "next/navigation"
 
 export function Navbar() {
     const searchForm = useForm();
@@ -29,7 +29,8 @@ export function Navbar() {
             <NavigationMenuList>
                 <NavigationMenuItem>
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                        <Link href="/"><span className="flex gap-2 items-center"><Clapperboard color="darkred" /><span className="hidden md:block font-bold text-lg">MovieReviews</span></span></Link>
+                        <Link href="/"><span className="flex gap-2 items-center"><Clapperboard color="darkred"/><span
+                            className="hidden md:block font-bold text-lg">MovieReviews</span></span></Link>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
                 {/* <NavigationMenuItem>
@@ -40,12 +41,14 @@ export function Navbar() {
                 </NavigationMenuItem> */}
                 <NavigationMenuItem>
                     <form onSubmit={searchForm.handleSubmit((data) => handleSearch(data))} className="flex gap-1">
-                        <Input placeholder="Search..." {...searchForm.register("search")} className="w-full" defaultValue={useSearchParams().get("q") ?? ""} />
-                        <Button className="cursor-pointer" type="submit" variant="secondary" size="icon"><Search /></Button>
+                        <Input placeholder="Search..." {...searchForm.register("search")} className="w-full"
+                               defaultValue={useSearchParams().get("q") ?? ""}/>
+                        <Button className="cursor-pointer" type="submit" variant="secondary"
+                                size="icon"><Search/></Button>
                     </form>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                    <HeaderAccountButton />
+                    <HeaderAccountButton/>
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>

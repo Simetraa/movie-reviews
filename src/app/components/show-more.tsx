@@ -1,8 +1,8 @@
-import {useLayoutEffect, useRef, useState} from "react";
-import {Button} from "@/components/ui/button";
+import { useLayoutEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import Markdown from "react-markdown";
 
-export function ShowMoreText({ text }: { text: string }) {
+export function ShowMoreText({text}: { text: string }) {
     const [expanded, setExpanded] = useState(false);
     const [isOverflowing, setIsOverflowing] = useState(false);
     const contentRef = useRef<HTMLDivElement>(null);

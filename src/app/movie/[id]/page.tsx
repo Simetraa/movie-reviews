@@ -1,25 +1,25 @@
 "use client"
-import {Badge, badgeVariants} from "@/components/ui/badge";
+import { Badge, badgeVariants } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-import {useParams} from "next/navigation";
+import { useParams } from "next/navigation";
 import humanizeDuration from "humanize-duration"
-import useSWR, {mutate} from 'swr'
-import {dateFromString} from "@/app/utils/utils";
-import {Plus, Star} from "lucide-react";
-import {Separator} from "@/components/ui/separator";
+import useSWR, { mutate } from 'swr'
+import { dateFromString } from "@/app/utils/utils";
+import { Plus, Star } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 import fetcher from "@/app/utils/fetcher";
-import {CrewCardRow} from "@/app/components/crew-card-row";
-import {useEffect, useState} from "react";
-import {Rating, RatingButton} from "@/components/ui/shadcn-io/rating";
+import { CrewCardRow } from "@/app/components/crew-card-row";
+import { useEffect, useState } from "react";
+import { Rating, RatingButton } from "@/components/ui/shadcn-io/rating";
 import Cookies from "js-cookie";
-import {ReviewsWidget} from "@/app/components/reviews-widget";
-import {Button} from "@/components/ui/button";
+import { ReviewsWidget } from "@/app/components/reviews-widget";
+import { Button } from "@/components/ui/button";
 
 export default function MoviePage() {
-    const { id } = useParams();
+    const {id} = useParams();
 
-    const { data: detailsData, error: detailsError, isLoading: isDetailsLoading } = useSWR<MovieDetails>(
+    const {data: detailsData, error: detailsError, isLoading: isDetailsLoading} = useSWR<MovieDetails>(
         `https://api.themoviedb.org/3/movie/${id}`,
         fetcher
     )
@@ -33,10 +33,11 @@ export default function MoviePage() {
     // )
 
 
-
-
-
-    const { data: accountStatesData, error: accountStatesError, isLoading: isAccountStatesLoading } = useSWR<AccountStates>(
+    const {
+        data: accountStatesData,
+        error: accountStatesError,
+        isLoading: isAccountStatesLoading
+    } = useSWR<AccountStates>(
         `https://api.themoviedb.org/3/movie/${id}/account_states`,
         fetcher,
         {
@@ -70,13 +71,13 @@ export default function MoviePage() {
                 "Content-Type": "application/json;charset=utf-8",
                 Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API}`,
             },
-            body: JSON.stringify({ value: newRating * 2 }),
+            body: JSON.stringify({value: newRating * 2}),
         });
 
         if (res.ok) {
             mutate(
                 `https://api.themoviedb.org/3/movie/${id}/account_states`,
-                { ...accountStatesData, rated: { value: newRating * 2 } },
+                {...accountStatesData, rated: {value: newRating * 2}},
                 false
             );
 
@@ -122,7 +123,7 @@ export default function MoviePage() {
             setWatchlist(!watchlist);
             mutate(
                 `https://api.themoviedb.org/3/movie/${id}/account_states`,
-                { ...accountStatesData, watchlist: !watchlist },
+                {...accountStatesData, watchlist: !watchlist},
                 false
             );
             mutate(`https://api.themoviedb.org/3/movie/${id}/account_states`);
@@ -135,21 +136,17 @@ export default function MoviePage() {
     }
 
 
-
-
     if (detailsError || accountStatesError) return <p>Failed to load.</p>
     if (isDetailsLoading || isAccountStatesLoading) return <p>Loading...</p>
 
 
-
-
-
-
     return <>
         <div className="flex-col md:flex-row flex gap-8">
-            <Image className="w-full md:w-[300px]" alt="movie poster" width="300" height="450" src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2${detailsData!.poster_path}`}></Image>
+            <Image className="w-full md:w-[300px]" alt="movie poster" width="300" height="450"
+                   src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2${detailsData!.poster_path}`}></Image>
             <div className="flex flex-col gap-4">
-                <h1 className="text-2xl">{detailsData!.title} <span className="text-neutral-600">({dateFromString(detailsData!.release_date).getFullYear()})</span></h1>
+                <h1 className="text-2xl">{detailsData!.title} <span
+                    className="text-neutral-600">({dateFromString(detailsData!.release_date).getFullYear()})</span></h1>
                 <div className="flex gap-4 flex-wrap">
                     <div className="flex gap-2">
                         <Star></Star>
@@ -157,7 +154,8 @@ export default function MoviePage() {
                     </div>
                     <Separator orientation="vertical"></Separator>
                     <div className="flex gap-2">
-                        {detailsData?.genres.map((genre) => <Link key={genre.id} href={`/genre/${genre.id}`} className={badgeVariants({ variant: "outline" })}>{genre.name}</Link>)}
+                        {detailsData?.genres.map((genre) => <Link key={genre.id} href={`/genre/${genre.id}`}
+                                                                  className={badgeVariants({variant: "outline"})}>{genre.name}</Link>)}
                     </div>
                     <Separator orientation="vertical"></Separator>
                     <Badge>{humanizeDuration(detailsData!.runtime * 60 * 1000)}</Badge>
@@ -166,15 +164,14 @@ export default function MoviePage() {
                 <p>{detailsData?.overview}</p>
                 <div className="flex gap-8 flex-row">
                     <Button className="" onClick={handleWatchlistToggle}>
-                        <Plus />{watchlist ? "Remove from watchlist" : "Add to watchlist"}
+                        <Plus/>{watchlist ? "Remove from watchlist" : "Add to watchlist"}
                     </Button>
-
 
 
                     <div className="flex items-center gap-4">
                         <Rating onChange={handleRatingChange} value={rating}>
-                            {Array.from({ length: 5 }).map((_, index) => (
-                                <RatingButton key={index} />
+                            {Array.from({length: 5}).map((_, index) => (
+                                <RatingButton key={index}/>
                             ))}
                         </Rating>
                     </div>
@@ -184,11 +181,11 @@ export default function MoviePage() {
         </div>
         <div className="text-xl">
             <h2>Crew</h2>
-            <CrewCardRow id={Number(id)} />
+            <CrewCardRow id={Number(id)}/>
         </div>
         <div className="flex flex-col gap-1">
             <h2 className="text-xl">Reviews</h2>
-            <ReviewsWidget movieId={Number(id)} />
+            <ReviewsWidget movieId={Number(id)}/>
         </div>
     </>
 }

@@ -1,9 +1,9 @@
 "use client";
-import {Movie} from "@/types/Movie"
-import {useEffect, useState} from "react";
-import {Spinner} from "@/components/ui/spinner";
+import { Movie } from "@/types/Movie"
+import { useEffect, useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 import InfiniteScroll from "@/components/ui/infinite-scroll";
-import {MovieCardHorizontal} from "../components/movie-card-horizontal"
+import { MovieCardHorizontal } from "../components/movie-card-horizontal"
 import fetcher from "../utils/fetcher"
 
 //import useSWR from 'swr'
@@ -40,7 +40,6 @@ export default function MovieInfinitePage(props: { url: string, title: string })
     };
 
 
-
     if (error) return <p>Failed to load.</p>
     if (isLoading && page == 1) return <p>Loading...</p>
 
@@ -52,10 +51,10 @@ export default function MovieInfinitePage(props: { url: string, title: string })
         <InfiniteScroll isLoading={isLoading} next={loadMore} hasMore={hasMore}>
             <div className="grid [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] p-4 gap-4">
                 {movies.map((movie) => (
-                    <MovieCardHorizontal key={movie.id} movie={movie} />
+                    <MovieCardHorizontal key={movie.id} movie={movie}/>
                 ))}
             </div>
-            {isLoading && <Spinner />}
+            {isLoading && <Spinner/>}
         </InfiniteScroll>
     </>
 }

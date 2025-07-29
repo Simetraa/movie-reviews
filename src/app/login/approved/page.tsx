@@ -1,8 +1,7 @@
-
 "use client";
 import Cookies from 'js-cookie'
-import {redirect, useSearchParams} from "next/navigation";
-import {useEffect} from "react";
+import { redirect, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 
 export default function ApprovedPage() {
@@ -21,7 +20,7 @@ export default function ApprovedPage() {
                     "content-type": "application/json",
                     Authorization: token,
                 },
-                body: JSON.stringify({ request_token: requestToken }),
+                body: JSON.stringify({request_token: requestToken}),
             };
 
             let request = await fetch(`https://api.themoviedb.org/3/authentication/session/new`, options);
