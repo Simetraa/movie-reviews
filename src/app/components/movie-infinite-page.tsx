@@ -6,8 +6,6 @@ import InfiniteScroll from "@/components/ui/infinite-scroll";
 import { MovieCardHorizontal } from "../components/movie-card-horizontal"
 import fetcher from "../utils/fetcher"
 
-//import useSWR from 'swr'
-
 export default function MovieInfinitePage(props: { url: string, title: string }) {
     const [page, setPage] = useState(1);
     const [movies, setMovies] = useState<Movie[]>([]);

@@ -66,7 +66,6 @@ export default function SearchPage() {
 
     useEffect(() => {
         if (data?.results) {
-
             if (page === 1) {
                 setResults(data.results);
             } else {
