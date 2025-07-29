@@ -1,12 +1,12 @@
 "use client";
 import Cookies from 'js-cookie'
-import { redirect, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, Suspense } from "react";
 
-
-export default function ApprovedPage() {
+function ApprovedContent() {
     const searchParams = useSearchParams();
     const requestToken = searchParams.get("request_token");
+    const router = useRouter();
 
     useEffect(() => {
         const fetchSession = async () => {
@@ -20,19 +20,28 @@ export default function ApprovedPage() {
                     "content-type": "application/json",
                     Authorization: token,
                 },
-                body: JSON.stringify({request_token: requestToken}),
+                body: JSON.stringify({ request_token: requestToken }),
             };
 
-            let request = await fetch(`https://api.themoviedb.org/3/authentication/session/new`, options);
-            let sessionToken = await request.json();
-
+            const request = await fetch(`https://api.themoviedb.org/3/authentication/session/new`, options);
+            const sessionToken = await request.json();
 
             Cookies.set('session_id', sessionToken.session_id)
         };
 
         fetchSession();
 
-        redirect("/account")
+        router.push("/account")
 
-    }, [requestToken]);
+    }, [requestToken, router]);
+
+    return <div>Processing login...</div>;
+}
+
+export default function ApprovedPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ApprovedContent />
+        </Suspense>
+    );
 }

@@ -4,7 +4,7 @@ import Image from "next/image";
 import useSWR from "swr";
 import fetcher from "@/app/utils/fetcher";
 import { MovieCardHorizontal } from "@/app/components/movie-card-horizontal";
-import React, { useEffect, useRef, useState } from "react";
+import React, {  } from "react";
 import { useParams } from "next/navigation";
 import { PersonWithCredits } from "@/types/Person";
 import { Spinner } from "@/components/ui/spinner";

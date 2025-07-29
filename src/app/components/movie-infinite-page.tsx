@@ -13,23 +13,25 @@ export default function MovieInfinitePage(props: { url: string, title: string })
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<null | string>(null);
 
-    const fetchMovies = async (page: number) => {
-        setIsLoading(true);
-        try {
-            const res = await fetcher(`${props.url}?page=${page}`);
-            setMovies(prev => [...prev, ...res.results]);
-            setHasMore(page < res.total_pages);
-            setError(null);
-        } catch (err) {
-            setError("Failed to load.");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+
 
     useEffect(() => {
+        const fetchMovies = async (page: number) => {
+            setIsLoading(true);
+            try {
+                const res = await fetcher(`${props.url}?page=${page}`);
+                setMovies(prev => [...prev, ...res.results]);
+                setHasMore(page < res.total_pages);
+                setError(null);
+            } catch {
+                setError("Failed to load:",);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
         fetchMovies(page);
-    }, [page]);
+    }, [page, props.url]);
 
     const loadMore = () => {
         if (!isLoading && hasMore) {
@@ -49,10 +51,10 @@ export default function MovieInfinitePage(props: { url: string, title: string })
         <InfiniteScroll isLoading={isLoading} next={loadMore} hasMore={hasMore}>
             <div className="grid [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] p-4 gap-4">
                 {movies.map((movie) => (
-                    <MovieCardHorizontal key={movie.id} movie={movie}/>
+                    <MovieCardHorizontal key={movie.id} movie={movie} />
                 ))}
             </div>
-            {isLoading && <Spinner/>}
+            {isLoading && <Spinner />}
         </InfiniteScroll>
     </>
 }

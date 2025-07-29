@@ -67,7 +67,7 @@ export default function AccountPage() {
                 <div className="flex h-5 items-center space-x-4 text-sm">
                     <span>#{accountData?.id}</span>
                     <Separator orientation="vertical" className="h-6 w-px bg-border" />
-                    <ReactCountryFlag countryCode={accountData?.iso_3166_1!} svg style={{
+                    <ReactCountryFlag countryCode={accountData!.iso_3166_1} svg style={{
                         width: '2em',
                         height: '2em',
                     }} />
