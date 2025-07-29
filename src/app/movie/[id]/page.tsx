@@ -17,9 +17,9 @@ import { ReviewsWidget } from "@/app/components/reviews-widget";
 import { Button } from "@/components/ui/button";
 
 export default function MoviePage() {
-    const {id} = useParams();
+    const { id } = useParams();
 
-    const {data: detailsData, error: detailsError, isLoading: isDetailsLoading} = useSWR<MovieDetails>(
+    const { data: detailsData, error: detailsError, isLoading: isDetailsLoading } = useSWR<MovieDetails>(
         `https://api.themoviedb.org/3/movie/${id}`,
         fetcher
     )
@@ -71,13 +71,13 @@ export default function MoviePage() {
                 "Content-Type": "application/json;charset=utf-8",
                 Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API}`,
             },
-            body: JSON.stringify({value: newRating * 2}),
+            body: JSON.stringify({ value: newRating * 2 }),
         });
 
         if (res.ok) {
             mutate(
                 `https://api.themoviedb.org/3/movie/${id}/account_states`,
-                {...accountStatesData, rated: {value: newRating * 2}},
+                { ...accountStatesData, rated: { value: newRating * 2 } },
                 false
             );
 
@@ -87,7 +87,6 @@ export default function MoviePage() {
 
     async function handleWatchlistToggle() {
         const sessionId = Cookies.get("session_id");
-        console.log("Session ID used for watchlist:", sessionId);
         const accountRes = await fetch(
             `https://api.themoviedb.org/3/account?session_id=${sessionId}`,
             {
@@ -123,7 +122,7 @@ export default function MoviePage() {
             setWatchlist(!watchlist);
             mutate(
                 `https://api.themoviedb.org/3/movie/${id}/account_states`,
-                {...accountStatesData, watchlist: !watchlist},
+                { ...accountStatesData, watchlist: !watchlist },
                 false
             );
             mutate(`https://api.themoviedb.org/3/movie/${id}/account_states`);
@@ -141,51 +140,54 @@ export default function MoviePage() {
 
 
     return <>
-        <div className="flex-col md:flex-row flex gap-8">
-            <Image className="w-full md:w-[300px]" alt="movie poster" width="300" height="450"
-                   src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2${detailsData!.poster_path}`}></Image>
-            <div className="flex flex-col gap-4">
-                <h1 className="text-2xl">{detailsData!.title} <span
-                    className="text-neutral-600">({dateFromString(detailsData!.release_date).getFullYear()})</span></h1>
-                <div className="flex gap-4 flex-wrap">
-                    <div className="flex gap-2">
-                        <Star></Star>
-                        <span>{detailsData!.vote_average}</span>
-                    </div>
-                    <Separator orientation="vertical"></Separator>
-                    <div className="flex gap-2">
-                        {detailsData?.genres.map((genre) => <Link key={genre.id} href={`/genre/${genre.id}`}
-                                                                  className={badgeVariants({variant: "outline"})}>{genre.name}</Link>)}
-                    </div>
-                    <Separator orientation="vertical"></Separator>
-                    <Badge>{humanizeDuration(detailsData!.runtime * 60 * 1000)}</Badge>
+        <div className="flex flex-col gap-4">
+            <div className="flex-col md:flex-row flex gap-8">
+                <Image className="w-full md:w-[300px]" alt="movie poster" width="300" height="450"
+                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2${detailsData!.poster_path}`}></Image>
+                <div className="flex flex-col gap-4">
+                    <h1 className="text-2xl">{detailsData!.title} <span
+                        className="text-neutral-600">({dateFromString(detailsData!.release_date).getFullYear()})</span></h1>
+                    <div className="flex gap-4 flex-wrap">
+                        <div className="flex gap-2">
+                            <Star></Star>
+                            <span>{detailsData!.vote_average}</span>
+                        </div>
+                        <Separator orientation="vertical"></Separator>
+                        <div className="flex gap-2">
+                            {detailsData?.genres.map((genre) => <Link key={genre.id} href={`/genre/${genre.id}`}
+                                className={badgeVariants({ variant: "outline" })}>{genre.name}</Link>)}
+                        </div>
+                        <Separator orientation="vertical"></Separator>
+                        <Badge>{humanizeDuration(detailsData!.runtime * 60 * 1000)}</Badge>
 
+                    </div>
+                    <p>{detailsData?.overview}</p>
+                    {Cookies.get("session_id") && <div className="flex gap-8 flex-row">
+                        <Button className="" onClick={handleWatchlistToggle}>
+                            <Plus />{watchlist ? "Remove from watchlist" : "Add to watchlist"}
+                        </Button>
+
+
+
+                        <div className="flex items-center gap-4">
+                            <Rating onChange={handleRatingChange} value={rating}>
+                                {Array.from({ length: 5 }).map((_, index) => (
+                                    <RatingButton key={index} />
+                                ))}
+                            </Rating>
+                        </div>
+                    </div>
+                    }
                 </div>
-                <p>{detailsData?.overview}</p>
-                <div className="flex gap-8 flex-row">
-                    <Button className="" onClick={handleWatchlistToggle}>
-                        <Plus/>{watchlist ? "Remove from watchlist" : "Add to watchlist"}
-                    </Button>
-
-
-                    <div className="flex items-center gap-4">
-                        <Rating onChange={handleRatingChange} value={rating}>
-                            {Array.from({length: 5}).map((_, index) => (
-                                <RatingButton key={index}/>
-                            ))}
-                        </Rating>
-                    </div>
-                </div>
-
             </div>
-        </div>
-        <div className="text-xl">
-            <h2>Crew</h2>
-            <CrewCardRow id={Number(id)}/>
-        </div>
-        <div className="flex flex-col gap-1">
-            <h2 className="text-xl">Reviews</h2>
-            <ReviewsWidget movieId={Number(id)}/>
+            <div className="text-xl">
+                <h2>Crew</h2>
+                <CrewCardRow id={Number(id)} />
+            </div>
+            <div className="flex flex-col gap-1">
+                <h2 className="text-xl">Reviews</h2>
+                <ReviewsWidget movieId={Number(id)} />
+            </div>
         </div>
     </>
 }
