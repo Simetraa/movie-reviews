@@ -1,41 +1,51 @@
+"use client";
+
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import useSWR from "swr";
+import fetcher from "@/app/utils/fetcher";
+import { MovieCardHorizontal } from "@/app/components/movie-card-horizontal";
+import { MovieCardRow } from "@/app/components/movie-card-row";
+import React, { useRef, useEffect, useState } from "react";
 
-async function getActor(id: string) {
-  const res = await fetch(
+export default function ActorPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
+  const { data: actor, error: actorError, isLoading: isActorLoading } = useSWR(
     `https://api.themoviedb.org/3/person/${id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API}`,
-        accept: "application/json",
-      },
-    }
+    fetcher
   );
-  if (!res.ok) return null;
-  return res.json();
-}
-
-async function getActorMovies(id: string) {
-  const res = await fetch(
+  const { data: credits, error: creditsError, isLoading: isCreditsLoading } = useSWR(
     `https://api.themoviedb.org/3/person/${id}/movie_credits`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API}`,
-        accept: "application/json",
-      },
-    }
+    fetcher
   );
-  if (!res.ok) return [];
-  const data = await res.json();
+  const movies = credits?.cast ? [...credits.cast].sort((a: any, b: any) => b.popularity - a.popularity).slice(0, 10) : [];
+  const [visibleCount, setVisibleCount] = useState(10);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  return (data.cast || []).sort((a: any, b: any) => b.popularity - a.popularity).slice(0, 10);
-}
+  // Infinite scroll handler
+  useEffect(() => {
+    const handleScroll = () => {
+      const el = scrollRef.current;
+      if (!el) return;
+      if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 100) {
+        setVisibleCount((prev) => Math.min(prev + 10, movies.length));
+      }
+    };
+    const el = scrollRef.current;
+    if (el) {
+      el.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (el) {
+        el.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [movies.length]);
 
-export default async function ActorPage({ params }: { params: { id: string } }) {
-  const actor = await getActor(params.id);
-  if (!actor) return notFound();
-  const notableMovies = await getActorMovies(params.id);
+  if (actorError || creditsError) return <p>Failed to load.</p>;
+  if (isActorLoading || isCreditsLoading) return <p>Loading...</p>;
+  if (!actor) return <p>Actor not found.</p>;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -70,39 +80,15 @@ export default async function ActorPage({ params }: { params: { id: string } }) 
           )}
         </div>
       </div>
-
       {/* Notable Movies Section */}
       <div>
         <h2 className="text-xl font-semibold mb-4">Notable Movies</h2>
-        {notableMovies.length === 0 ? (
+        {movies.length === 0 ? (
           <p className="text-gray-500">No notable movies found.</p>
         ) : (
-          <div className="flex flex-row flex-wrap gap-6">
-            {notableMovies.map((movie: any) => (
-              <Link key={movie.id} href={`/movie/${movie.id}`}>
-                <div className="w-[200px] flex flex-col shadow-md rounded-md overflow-hidden hover:scale-105 duration-300 h-full bg-white">
-                  {movie.poster_path ? (
-                    <Image
-                      width={300}
-                      height={450}
-                      alt={movie.title}
-                      src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                      className="w-full h-auto object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-                      <span className="text-xs text-gray-400">Movie Poster</span>
-                    </div>
-                  )}
-                  <div className="flex flex-col flex-1 p-3 justify-between min-h-0">
-                    <h3 className="text-base font-semibold mb-1">{movie.title}</h3>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <span>⭐ {movie.vote_average ? movie.vote_average.toFixed(1) : "N/A"}/10</span>
-                      <span>{movie.release_date ? new Date(movie.release_date).getFullYear() : ""}</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
+          <div ref={scrollRef} className="flex flex-row overflow-x-scroll overflow-y-clip gap-x-4">
+            {movies.slice(0, visibleCount).map((movie: any) => (
+              <MovieCardHorizontal key={movie.id} movie={movie} />
             ))}
           </div>
         )}

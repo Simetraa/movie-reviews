@@ -45,11 +45,10 @@ export default function MoviePage() {
     )
 
     useEffect(() => {
-        if (
-            accountStatesData &&
-            accountStatesData.rated
-        ) {
-            setRating(accountStatesData.rated.value / 2);
+        if (accountStatesData) {
+            if (accountStatesData.rated) {
+                setRating(accountStatesData.rated.value / 2);
+            }
             setWatchlist(accountStatesData.watchlist);
         }
     }, [accountStatesData]);
