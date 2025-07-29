@@ -1,9 +1,11 @@
-type Person = {
+import type { Movie } from "./Movie";
+
+type PersonWithCredits = {
     adult: boolean;
     also_known_as: string[];
     biography: string;
     birthday: string;
-    deathday: string;
+    deathday: string | null;
     gender: number;
     homepage: string;
     id: number;
@@ -13,4 +15,7 @@ type Person = {
     place_of_birth: string;
     popularity: number;
     profile_path: string;
+    movie_credits: {
+        cast: Movie[];
+    };
 };
