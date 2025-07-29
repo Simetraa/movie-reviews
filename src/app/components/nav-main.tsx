@@ -19,7 +19,7 @@ export function Navbar() {
     }
 
     return (
-        <NavigationMenu>
+        <NavigationMenu className="h-[56px]">
             <NavigationMenuList>
                 <NavigationMenuItem>
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
