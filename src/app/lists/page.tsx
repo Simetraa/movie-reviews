@@ -12,9 +12,13 @@ import Link from "next/link";
 
 export default function ListsPage() {
     const sessionId = Cookies.get("session_id");
+    const accountId = Cookies.get('account_id');
+
 
     const { data, error, isLoading } = useSWR<PaginatedResponse<List>>(
-        `https://api.themoviedb.org/3/account/{account_id}/lists?session_id=${sessionId}`,
+        sessionId && accountId
+            ? `https://api.themoviedb.org/3/account/${accountId}/lists?session_id=${sessionId}`
+            : null,
         fetcher
     )
 
@@ -22,10 +26,10 @@ export default function ListsPage() {
     if (isLoading) return <Spinner></Spinner>
 
     return <>
-        {data && data.results.map((list: List) => (
-            <div key={list.id}>
-                <Link href={`/lists/${list.id}`}>
-                    <Card>
+        <div className="grid gap-4">
+            {data?.results.map((list) => (
+                <Link key={list.id} href={`/lists/${list.id}`}>
+                    <Card className="cursor-pointer hover:shadow-lg transition">
                         <CardHeader>{list.name}</CardHeader>
                         <CardContent className="flex flex-col gap-2">
                             <CardDescription>{list.description}</CardDescription>
@@ -36,8 +40,7 @@ export default function ListsPage() {
                         </CardContent>
                     </Card>
                 </Link>
-            </div>
-        ))}
+            ))}
+        </div>
     </>
-
 }

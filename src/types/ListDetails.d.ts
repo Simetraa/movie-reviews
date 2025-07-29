@@ -1,4 +1,4 @@
-type ListItem = {
+export type ListItem = {
     adult: boolean;
     backdrop_path: string;
     genre_ids: number[];
@@ -16,7 +16,7 @@ type ListItem = {
     vote_count: number;
 };
 
-type ListDetails = {
+export type ListDetails = {
     created_by: string;
     description: string;
     favorite_count: number;
