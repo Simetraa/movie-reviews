@@ -8,7 +8,7 @@ import { AccountHeader } from "../components/account-header";
 import { WatchlistRow } from "../components/watchlist-row";
 import Gravatar from "react-gravatar";
 import { Separator } from "@/components/ui/separator";
-import { BinocularsIcon, Flag, Heart, List, ListRestart, Star } from "lucide-react";
+import { BinocularsIcon, Flag, Heart, List, ListRestart, Star, ArrowRight } from "lucide-react";
 import emojiFlags from 'emoji-flags';
 import ReactCountryFlag from "react-country-flag";
 import { Spinner } from "@/components/ui/spinner";
@@ -113,13 +113,21 @@ export default function AccountPage() {
             </div>
 
             {/* Watchlist Section */}
-            <h2 className="text-md font-medium"><BinocularsIcon className="inline-block mr-2" />Watchlist</h2>
-            {isWatchlistLoading && <Spinner></Spinner>}
+            <h2 className="text-md font-medium">
+                <BinocularsIcon className="inline-block mr-2" />Watchlist
+            </h2>
+            {isWatchlistLoading && <Spinner />}
             {watchlistError && <p>Failed to load watchlist.</p>}
             <div className="flex flex-row gap-4 overflow-x-scroll overflow-y-clip">
-                {watchlistData?.results.map((item) => (
+                {watchlistData?.results.slice(0, 10).map((item) => (
                     <MovieCardHorizontal key={item.id} movie={item} />
                 ))}
+                <Link href="/watchlist">
+                    <div className="flex w-[150px] h-[321px] flex-col items-center justify-center shadow-md rounded-md overflow-hidden bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer">
+                        <ArrowRight className="w-8 h-8 text-gray-400" />
+                        <span className="text-gray-500 mt-2 font-semibold">See all</span>
+                    </div>
+                </Link>
             </div>
             <h2 className="text-md font-medium"><Star className="inline-block mr-2" />Rated Movies</h2>
             {isRatedMoviesLoading && <Spinner></Spinner>}
