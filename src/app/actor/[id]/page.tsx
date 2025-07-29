@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { PersonWithCredits } from "@/types/Person";
 import { Spinner } from "@/components/ui/spinner";
+import { Cake } from "lucide-react";
 
 export default function ActorPage() {
   const { id } = useParams();
@@ -21,8 +22,7 @@ export default function ActorPage() {
   if (isActorLoading) return <Spinner></Spinner>;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Profile Card */}
+    <div>
       <div className="flex flex-col md:flex-row items-center md:items-start gap-8 bg-white rounded-xl shadow-lg p-8 mb-12">
         <div className="w-48 h-64 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center mb-4 md:mb-0">
           {actor?.profile_path ? (
@@ -44,7 +44,7 @@ export default function ActorPage() {
           </div>
           {actor?.birthday && (
             <div className="text-gray-600 mb-2 flex items-center gap-2">
-              <span role="img" aria-label="birthday">🎂</span>
+              <Cake></Cake>
               <span>Born: {actor.birthday}</span>
             </div>
           )}
