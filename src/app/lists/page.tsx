@@ -3,12 +3,12 @@
 import useSWR from "swr";
 import Cookies from "js-cookie";
 import fetcher from "../utils/fetcher";
-import { Spinner } from "@/components/ui/spinner";
+import {Spinner} from "@/components/ui/spinner";
 import pluralize from "pluralize";
-import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card";
+import {Badge} from "@/components/ui/badge";
 import Link from "next/link";
-import { PaginatedResponse } from "@/types/PaginatedResponse";
+import {PaginatedResponse} from "@/types/PaginatedResponse";
 
 export default function ListsPage() {
     const sessionId = Cookies.get("session_id");

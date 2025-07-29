@@ -1,6 +1,6 @@
 "use client";
 import useSWR from 'swr'
-import { redirect } from 'next/navigation'
+import {redirect} from 'next/navigation'
 
 const fetcher = async (url: string) => {
     const token = `Bearer ${process.env.NEXT_PUBLIC_TMDB_API}`

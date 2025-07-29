@@ -1,17 +1,16 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import fetcher from "../utils/fetcher";
 import useSWR from "swr";
-import { MovieCardHorizontal } from "../components/movie-card-horizontal";
-import { Spinner } from "@/components/ui/spinner";
+import {MovieCardHorizontal} from "../components/movie-card-horizontal";
+import {Spinner} from "@/components/ui/spinner";
 import InfiniteScroll from "@/components/ui/infinite-scroll";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import GenreFilterMenu from "../components/genre-filter-menu";
 import SortByMenu from "../components/sort-by-menu";
-import { Movie } from "@/types/Movie";
-import { Badge } from "@/components/ui/badge";
-
+import {Movie} from "@/types/Movie";
+import {PaginatedResponse} from "@/types/PaginatedResponse";
 
 
 export default function SearchPage() {

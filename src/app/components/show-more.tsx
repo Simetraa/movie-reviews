@@ -1,5 +1,5 @@
-import { useState, useRef, useLayoutEffect } from "react";
-import { Button } from "@/components/ui/button";
+import {useLayoutEffect, useRef, useState} from "react";
+import {Button} from "@/components/ui/button";
 import Markdown from "react-markdown";
 
 export function ShowMoreText({ text }: { text: string }) {

@@ -1,13 +1,10 @@
 "use client";
 
-import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import useSWR from "swr";
 import fetcher from "@/app/utils/fetcher";
-import { MovieCardHorizontal } from "@/app/components/movie-card-horizontal";
-import { MovieCardRow } from "@/app/components/movie-card-row";
-import React, { useRef, useEffect, useState } from "react";
+import {MovieCardHorizontal} from "@/app/components/movie-card-horizontal";
+import React, {useEffect, useRef, useState} from "react";
 
 export default function ActorPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);

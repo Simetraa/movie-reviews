@@ -1,8 +1,8 @@
 
 "use client";
 import Cookies from 'js-cookie'
-import { redirect, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import {redirect, useSearchParams} from "next/navigation";
+import {useEffect} from "react";
 
 
 export default function ApprovedPage() {

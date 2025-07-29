@@ -1,14 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import {useEffect, useState} from "react"
 import Cookies from "js-cookie"
-import type { Movie } from "@/types/Movie";
+import type {Movie} from "@/types/Movie";
 import useSWR from "swr";
 import fetcher from "../utils/fetcher";
-import { MovieCardHorizontal } from "../components/movie-card-horizontal";
-import { Spinner } from "@/components/ui/spinner";
-import { Plus } from "lucide-react";
-import type { PaginatedResponse } from "@/types/PaginatedResponse";
+import {MovieCardHorizontal} from "../components/movie-card-horizontal";
+import {Spinner} from "@/components/ui/spinner";
+import {Plus} from "lucide-react";
+import type {PaginatedResponse} from "@/types/PaginatedResponse";
 
 export default function WatchlistPage() {
   const sessionId = Cookies.get("session_id");

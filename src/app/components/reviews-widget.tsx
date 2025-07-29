@@ -1,9 +1,9 @@
 import useSWR from "swr";
-import { Separator } from "@/components/ui/separator";
-import { ShowMoreText } from "@/app/components/show-more";
-import { dateFromString } from "@/app/utils/utils";
+import {Separator} from "@/components/ui/separator";
+import {ShowMoreText} from "@/app/components/show-more";
+import {dateFromString} from "@/app/utils/utils";
 import fetcher from "../utils/fetcher";
-import { PaginatedResponse } from "@/types/PaginatedResponse";
+import {PaginatedResponse} from "@/types/PaginatedResponse";
 
 type Props = {
     movieId: number;

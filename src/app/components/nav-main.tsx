@@ -1,12 +1,18 @@
 "use client"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
-import { Clapperboard, HomeIcon, ListIcon, Search } from "lucide-react"
-import { FieldValues, useForm } from "react-hook-form"
-import { HeaderAccountButton } from "./header-account-button"
+import {Button} from "@/components/ui/button"
+import {Input} from "@/components/ui/input"
+import {
+    NavigationMenu,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu"
+import {Clapperboard, Search} from "lucide-react"
+import {FieldValues, useForm} from "react-hook-form"
+import {HeaderAccountButton} from "./header-account-button"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import {useSearchParams} from "next/navigation"
 
 export function Navbar() {
     const searchForm = useForm();

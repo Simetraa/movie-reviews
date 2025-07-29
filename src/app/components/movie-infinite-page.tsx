@@ -1,9 +1,9 @@
 "use client";
-import { Movie } from "@/types/Movie"
-import { useEffect, useState } from "react";
-import { Spinner } from "@/components/ui/spinner";
+import {Movie} from "@/types/Movie"
+import {useEffect, useState} from "react";
+import {Spinner} from "@/components/ui/spinner";
 import InfiniteScroll from "@/components/ui/infinite-scroll";
-import { MovieCardHorizontal } from "../components/movie-card-horizontal"
+import {MovieCardHorizontal} from "../components/movie-card-horizontal"
 import fetcher from "../utils/fetcher"
 
 //import useSWR from 'swr'

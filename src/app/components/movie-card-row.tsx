@@ -1,10 +1,9 @@
-import { Movie } from "@/types/Movie";
-import { MovieCard } from "./movie-card";
-import { MovieCardHorizontal } from "./movie-card-horizontal";
+import {Movie} from "@/types/Movie";
+import {MovieCardHorizontal} from "./movie-card-horizontal";
 import fetcher from "../utils/fetcher";
 import useSWR from "swr";
-import { Skeleton } from "@/components/ui/skeleton";
-import type { PaginatedResponse } from "@/types/PaginatedResponse";
+import {Skeleton} from "@/components/ui/skeleton";
+import type {PaginatedResponse} from "@/types/PaginatedResponse";
 
 type Props = {
     url: string,

@@ -1,20 +1,20 @@
 "use client"
-import { Badge, badgeVariants } from "@/components/ui/badge";
+import {Badge, badgeVariants} from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import {useParams} from "next/navigation";
 import humanizeDuration from "humanize-duration"
-import useSWR, { mutate } from 'swr'
-import { dateFromString } from "@/app/utils/utils";
-import { Plus, Star } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import useSWR, {mutate} from 'swr'
+import {dateFromString} from "@/app/utils/utils";
+import {Plus, Star} from "lucide-react";
+import {Separator} from "@/components/ui/separator";
 import fetcher from "@/app/utils/fetcher";
-import { CrewCardRow } from "@/app/components/crew-card-row";
-import { useEffect, useState } from "react";
-import { Rating, RatingButton } from "@/components/ui/shadcn-io/rating";
+import {CrewCardRow} from "@/app/components/crew-card-row";
+import {useEffect, useState} from "react";
+import {Rating, RatingButton} from "@/components/ui/shadcn-io/rating";
 import Cookies from "js-cookie";
-import { ReviewsWidget } from "@/app/components/reviews-widget";
-import { Button } from "@/components/ui/button";
+import {ReviewsWidget} from "@/app/components/reviews-widget";
+import {Button} from "@/components/ui/button";
 
 export default function MoviePage() {
     const { id } = useParams();

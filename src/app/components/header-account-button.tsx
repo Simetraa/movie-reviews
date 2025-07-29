@@ -2,8 +2,8 @@ import Cookies from "js-cookie";
 import fetcher from "../utils/fetcher";
 import useSWR from "swr";
 import Gravatar from "react-gravatar";
-import { NavigationMenuLink } from "@/components/ui/navigation-menu";
-import { Skeleton } from "@/components/ui/skeleton";
+import {NavigationMenuLink} from "@/components/ui/navigation-menu";
+import {Skeleton} from "@/components/ui/skeleton";
 import Link from "next/link";
 
 export function HeaderAccountButton() {

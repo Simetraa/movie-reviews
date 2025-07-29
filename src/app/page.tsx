@@ -1,11 +1,7 @@
 "use client";
 
 
-import useSWR from "swr";
-import fetcher from "./utils/fetcher";
-import { MovieCardRow } from "./components/movie-card-row";
-import { Spinner } from "@/components/ui/spinner";
-import { Badge } from "@/components/ui/badge";
+import {MovieCardRow} from "./components/movie-card-row";
 import Link from "next/link";
 
 export default function Home() {

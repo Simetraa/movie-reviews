@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import fetcher from '../utils/fetcher';
-import { Spinner } from '@/components/ui/spinner';
+import {Spinner} from '@/components/ui/spinner';
 import useSWR from 'swr';
 
 export function CrewCardRow({ id }: { id: number }) {

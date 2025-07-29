@@ -1,12 +1,12 @@
 import React from "react";
 import {
     DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
     DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import {Button} from "@/components/ui/button";
+import {Badge} from "@/components/ui/badge";
 
 interface Genre {
     id: number;

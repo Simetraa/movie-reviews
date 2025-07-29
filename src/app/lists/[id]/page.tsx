@@ -2,11 +2,11 @@
 
 import useSWR from "swr";
 import fetcher from "@/app/utils/fetcher";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import {useParams} from "next/navigation";
+import {useEffect, useState} from "react";
 import InfiniteScroll from "@/components/ui/infinite-scroll";
-import { MovieCardHorizontal } from "@/app/components/movie-card-horizontal";
-import { ListDetails, ListItem } from "@/types/ListDetails";
+import {MovieCardHorizontal} from "@/app/components/movie-card-horizontal";
+import {ListDetails, ListItem} from "@/types/ListDetails";
 
 
 export default function ListPage() {
