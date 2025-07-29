@@ -1,24 +1,21 @@
 'use client'
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import useSWR from "swr";
 import Cookies from "js-cookie";
 import fetcher from "../utils/fetcher";
 import { Spinner } from "@/components/ui/spinner";
-import pluralize, { plural } from "pluralize";
+import pluralize from "pluralize";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { PaginatedResponse } from "@/types/PaginatedResponse";
 
 export default function ListsPage() {
     const sessionId = Cookies.get("session_id");
     const accountId = Cookies.get('account_id');
 
 
-    const { data, error, isLoading } = useSWR<PaginatedResponse<List>>(
-        sessionId && accountId
-            ? `https://api.themoviedb.org/3/account/${accountId}/lists?session_id=${sessionId}`
-            : null,
+    const { data, error, isLoading } = useSWR<PaginatedResponse<List>>(`https://api.themoviedb.org/3/account/${accountId}/lists?session_id=${sessionId}`,
         fetcher
     )
 

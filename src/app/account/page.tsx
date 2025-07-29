@@ -4,12 +4,9 @@ import { useParams } from "next/navigation";
 import useSWR from 'swr'
 import Cookies from 'js-cookie'
 import { useMemo } from "react";
-import { AccountHeader } from "../components/account-header";
-import { WatchlistRow } from "../components/watchlist-row";
 import Gravatar from "react-gravatar";
 import { Separator } from "@/components/ui/separator";
-import { BinocularsIcon, Flag, Heart, List, ListRestart, Star, ArrowRight } from "lucide-react";
-import emojiFlags from 'emoji-flags';
+import { BinocularsIcon, Heart, List, Star, ArrowRight } from "lucide-react";
 import ReactCountryFlag from "react-country-flag";
 import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
@@ -18,6 +15,7 @@ import pluralize from "pluralize";
 import { MovieCardHorizontal } from "../components/movie-card-horizontal";
 import { Movie } from "@/types/Movie";
 import { Badge } from "@/components/ui/badge";
+import { PaginatedResponse } from "@/types/PaginatedResponse";
 
 const fetcher = async (url: string) => {
     const token = `Bearer ${process.env.NEXT_PUBLIC_TMDB_API}`
