@@ -1,38 +1,22 @@
 "use client"
 
-import {useParams} from "next/navigation";
+import { useParams } from "next/navigation";
 import useSWR from 'swr'
 import Cookies from 'js-cookie'
-import {useMemo} from "react";
+import { useMemo } from "react";
 import Gravatar from "react-gravatar";
-import {Separator} from "@/components/ui/separator";
-import {ArrowRight, BinocularsIcon, Heart, List, Star} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { ArrowRight, BinocularsIcon, Heart, List, Star } from "lucide-react";
 import ReactCountryFlag from "react-country-flag";
-import {Spinner} from "@/components/ui/spinner";
+import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
-import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import pluralize from "pluralize";
-import {MovieCardHorizontal} from "../components/movie-card-horizontal";
-import {Movie} from "@/types/Movie";
-import {Badge} from "@/components/ui/badge";
-import {PaginatedResponse} from "@/types/PaginatedResponse";
-
-const fetcher = async (url: string) => {
-    const token = `Bearer ${process.env.NEXT_PUBLIC_TMDB_API}`
-    const r = await fetch(url, {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-            Authorization: token
-        }
-    }
-    );
-
-    if (!r.ok) {
-        throw new Error("Could not fetch data")
-    }
-    return await r.json();
-}
+import { MovieCardHorizontal } from "../components/movie-card-horizontal";
+import { Badge } from "@/components/ui/badge";
+import fetcher from "../utils/fetcher";
+import { PaginatedResponse } from "@/types/PaginatedResponse";
+import { Movie } from "@/types/Movie";
 
 export default function AccountPage() {
     const { id } = useParams();
