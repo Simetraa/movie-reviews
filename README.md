@@ -1,5 +1,19 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+
+## Starting using Docker
+First, make sure you have [Docker](https://www.docker.com/get-started) installed on your machine.
+
+Then, you can run the following command to build and start the Docker container:
+
+```bash
+docker compose up --build
+```
+then open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+
+
 ## Getting Started
 
 First, run the development server:

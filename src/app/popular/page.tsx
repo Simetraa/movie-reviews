@@ -1,3 +1,4 @@
+import { Movie } from "@/types/Movie"
 import { MovieCardHorizontal } from "../components/movie-card-horizontal"
 import fetcher from "../utils/fetcher"
 

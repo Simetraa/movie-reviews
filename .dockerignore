@@ -1,0 +1,9 @@
+node_modules
+.next
+.dockerignore
+Dockerfile
+docker-compose.yml
+*.log
+*.md
+.env.local
+.idea

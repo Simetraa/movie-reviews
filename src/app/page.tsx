@@ -1,5 +1,6 @@
 "use client";
 
+
 import useSWR from "swr";
 import fetcher from "./utils/fetcher";
 import { MovieCardRow } from "./components/movie-card-row";
