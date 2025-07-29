@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Rating, RatingButton } from "@/components/ui/shadcn-io/rating";
 import Cookies from "js-cookie";
 import { ReviewsWidget } from "@/app/components/reviews-widget";
+import { Button } from "@/components/ui/button";
 
 export default function MoviePage() {
     const { id } = useParams();
@@ -53,19 +54,16 @@ export default function MoviePage() {
         }
     }, [accountStatesData]);
 
-
-
     async function handleRatingChange(
-        event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
+        _event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
         newRating: number
     ) {
         setRating(newRating);
 
         const sessionId = Cookies.get("session_id");
-
         const url = `https://api.themoviedb.org/3/movie/${id}/rating?session_id=${sessionId}`;
 
-        await fetch(url, {
+        const res = await fetch(url, {
             method: "POST",
             headers: {
                 accept: "application/json",
@@ -74,6 +72,16 @@ export default function MoviePage() {
             },
             body: JSON.stringify({ value: newRating * 2 }),
         });
+
+        if (res.ok) {
+            mutate(
+                `https://api.themoviedb.org/3/movie/${id}/account_states`,
+                { ...accountStatesData, rated: { value: newRating * 2 } },
+                false
+            );
+
+            mutate(`https://api.themoviedb.org/3/movie/${id}/account_states`);
+        }
     }
 
     async function handleWatchlistToggle() {
@@ -112,7 +120,12 @@ export default function MoviePage() {
 
         if (res.ok) {
             setWatchlist(!watchlist);
-            await mutate(`https://api.themoviedb.org/3/movie/${id}/account_states`, undefined, { revalidate: true });
+            mutate(
+                `https://api.themoviedb.org/3/movie/${id}/account_states`,
+                { ...accountStatesData, watchlist: !watchlist },
+                false
+            );
+            mutate(`https://api.themoviedb.org/3/movie/${id}/account_states`);
         }
 
         if (!res.ok) {
@@ -152,9 +165,12 @@ export default function MoviePage() {
                 </div>
                 <p>{detailsData?.overview}</p>
                 <div className="flex gap-8 flex-row">
-                    <button className="bg-red-700 flex self-start p-2 gap-1 items-center justify-center text-white rounded-sm" onClick={handleWatchlistToggle}>
+                    <Button className="" onClick={handleWatchlistToggle}>
                         <Plus />{watchlist ? "Remove from watchlist" : "Add to watchlist"}
-                    </button>
+                    </Button>
+
+
+
                     <div className="flex items-center gap-4">
                         <Rating onChange={handleRatingChange} value={rating}>
                             {Array.from({ length: 5 }).map((_, index) => (

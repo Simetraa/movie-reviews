@@ -8,25 +8,31 @@ import { Spinner } from "@/components/ui/spinner";
 import InfiniteScroll from "@/components/ui/infinite-scroll";
 import { useEffect, useState } from "react";
 import GenreFilterMenu from "../components/genre-filter-menu";
+import SortByMenu from "../components/sort-by-menu";
+import { Movie } from "@/types/Movie";
+import { Badge } from "@/components/ui/badge";
+
 
 
 export default function SearchPage() {
-
-    const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-
-
     const searchParams = useSearchParams();
-    const searchQueryRaw = searchParams.get("q") ?? "";
-    const searchQuery = encodeURIComponent(searchQueryRaw);
+    const searchQuery = searchParams.get("q") ?? "";
 
     const [page, setPage] = useState(1);
-    //const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [results, setResults] = useState<Movie[]>([]);
-    const [filteredResults, setFilteredResults] = useState<Movie[]>([]); // gefilterte Ergebnisse
 
 
-    //Genre Filter
+    const sortOptions = [
+        { label: "Most Popular", value: "popularity.desc" },
+        { label: "Highest Rated", value: "vote_average.desc" },
+        { label: "Latest Releases", value: "release_date.desc" },
+        { label: "Oldest First", value: "release_date.asc" },
+        { label: "Lowest Rated", value: "vote_average.asc" },
+    ];
+
+    const [sortBy, setSortBy] = useState("popularity.desc");
+
     const allGenres = [
         { id: 28, name: "Action" },
         { id: 12, name: "Adventure" },
@@ -44,13 +50,21 @@ export default function SearchPage() {
     const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
 
 
-    const url = searchQuery
-        ? `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}&page=${page}`
-        : null;
+    const url = new URL("https://api.themoviedb.org/3/discover/movie")
+    url.searchParams.append("page", page.toString());
+    if (searchQuery) {
+        url.searchParams.append("with_text_query", searchQuery);
+    }
+    if (selectedGenres.length > 0) {
+        url.searchParams.append("with_genres", selectedGenres.join(","));
+    }
+    url.searchParams.append("sort_by", sortBy);
 
-    const { data, error, isLoading } = useSWR<PaginatedResponse<Movie>>(url, fetcher);
+    const swrKey = url.toString();
 
-    //should append new data when there is new data for a page ( i dont know hwo necesary this will be but its nice to have i guess)
+
+    const { data, error, isLoading } = useSWR<PaginatedResponse<Movie>>(swrKey, fetcher);
+
     useEffect(() => {
         if (data?.results) {
 
@@ -64,27 +78,12 @@ export default function SearchPage() {
         }
     }, [data, page]);
 
-    //reset everything when new search is made
+
     useEffect(() => {
         setPage(1);
         setResults([]);
-        setFilteredResults([]);
         setHasMore(true);
-    }, [searchQueryRaw]);
-
-
-    //client side filtering because tmdb doesnt allow filter with /movie? request
-    useEffect(() => {
-        if (selectedGenres.length === 0) {
-            setFilteredResults(results);
-        } else {
-            setFilteredResults(
-                results.filter((movie) =>
-                    Array.isArray(movie.genre_ids) && movie.genre_ids.some((id) => selectedGenres.includes(id))
-                )
-            );
-        }
-    }, [selectedGenres, results]);
+    }, [searchQuery]);
 
     const loadMore = () => {
         if (hasMore && !isLoading) {
@@ -99,18 +98,27 @@ export default function SearchPage() {
 
     return (
         <>
-        <GenreFilterMenu
-            genres={allGenres}
-            selectedGenres={selectedGenres}
-            onChange={setSelectedGenres} />
-        <InfiniteScroll isLoading={isLoading} next={loadMore} hasMore={hasMore}>
-            <div className="grid [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] p-4 gap-4">
-                {filteredResults.map((movie) => (
-                    <MovieCardHorizontal key={movie.id} movie={movie} />
-                ))}
+            <div className="flex flex-wrap gap-4 items-center">
+                <GenreFilterMenu
+                    genres={allGenres}
+                    selectedGenres={selectedGenres}
+                    onChange={setSelectedGenres}
+                />
+                <SortByMenu
+                    options={sortOptions}
+                    selectedSort={sortBy}
+                    onChange={setSortBy}
+                />
             </div>
-            {isLoading && <Spinner />}
-        </InfiniteScroll>
+
+            <InfiniteScroll isLoading={isLoading} next={loadMore} hasMore={hasMore}>
+                <div className="grid [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] p-4 gap-4">
+                    {results.map((movie) => (
+                        <MovieCardHorizontal key={movie.id} movie={movie} />
+                    ))}
+                </div>
+                {isLoading && <Spinner />}
+            </InfiniteScroll>
         </>
     );
 }

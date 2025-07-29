@@ -11,7 +11,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Navbar></Navbar>
-        <div className="px-4 md:px-8 flex flex-col gap-8 w-full">
+        <div className="px-4 md:px-8 flex flex-col w-full">
           {children}
         </div>
         <footer>

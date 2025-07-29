@@ -24,9 +24,6 @@ export default function InfiniteScroll({
 
     const observer = React.useRef<IntersectionObserver>(null);
 
-    //TEST
-
-    // Ref to the sentinel element at the bottom (or top if reverse) of the content
     const sentinelRef = React.useRef<HTMLDivElement | null>(null);
 
     React.useEffect(() => {
@@ -34,7 +31,6 @@ export default function InfiniteScroll({
 
         if (observer.current) observer.current.disconnect();
 
-        // Ensure threshold is between 0 and 1; fallback to 1 if invalid
         const safeThreshold = threshold >= 0 && threshold <= 1 ? threshold : 1;
         if (threshold < 0 || threshold > 1) {
             console.warn(
@@ -51,7 +47,6 @@ export default function InfiniteScroll({
             { threshold: safeThreshold, root, rootMargin },
         );
 
-        // Start observing the sentinel element (the trigger point for loading more)
         if (sentinelRef.current) {
             observer.current.observe(sentinelRef.current);
         }
