@@ -1,12 +1,12 @@
 "use client"
 
-import { redirect, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import useSWR from 'swr'
 import Cookies from 'js-cookie'
 import { useMemo } from "react";
 import Gravatar from "react-gravatar";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, BinocularsIcon, Heart, List, Star } from "lucide-react";
+import { ArrowRight, BinocularsIcon, List, Star } from "lucide-react";
 import ReactCountryFlag from "react-country-flag";
 import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
@@ -18,7 +18,6 @@ import fetcher from "../utils/fetcher";
 import { PaginatedResponse } from "@/types/PaginatedResponse";
 import { Movie } from "@/types/Movie";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/router";
 
 export default function AccountPage() {
     const { id } = useParams();
@@ -47,16 +46,10 @@ export default function AccountPage() {
         fetcher
     )
 
-    const { data: favouriteMoviesData, error: favouriteMoviesError, isLoading: isFavouriteMoviesLoading } = useSWR<PaginatedResponse<Movie>>(
-        `https://api.themoviedb.org/3/account/${memoizedId}/favorite/movies?session_id=${sessionId}`,
-        fetcher
-    )
-
     function handleLogout() {
         Cookies.remove("session_id")
         window.location.assign("/");
     }
-
 
 
     console.log("Memoised id", memoizedId)
