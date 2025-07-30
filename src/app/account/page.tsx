@@ -1,6 +1,6 @@
 "use client"
 
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import useSWR from 'swr'
 import Cookies from 'js-cookie'
 import { useMemo } from "react";
@@ -17,6 +17,8 @@ import { Badge } from "@/components/ui/badge";
 import fetcher from "../utils/fetcher";
 import { PaginatedResponse } from "@/types/PaginatedResponse";
 import { Movie } from "@/types/Movie";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/router";
 
 export default function AccountPage() {
     const { id } = useParams();
@@ -50,6 +52,11 @@ export default function AccountPage() {
         fetcher
     )
 
+    function handleLogout() {
+        Cookies.remove("session_id")
+        window.location.assign("/");
+    }
+
 
 
     console.log("Memoised id", memoizedId)
@@ -58,75 +65,75 @@ export default function AccountPage() {
     if (isAccountLoading) return <p>Loading...</p>
 
 
-
     return (
         <>
-            <div className="flex items-center bg-accent gap-4 mx-[-32px] px-[32px] py-4">
-                <Gravatar md5={accountData?.avatar.gravatar.hash}></Gravatar>
-                <h1 className="text-xl">{accountData?.username}</h1>
-                <div className="flex h-5 items-center space-x-4 text-sm">
-                    <span>#{accountData?.id}</span>
-                    <Separator orientation="vertical" className="h-6 w-px bg-border" />
-                    <ReactCountryFlag countryCode={accountData!.iso_3166_1} svg style={{
-                        width: '2em',
-                        height: '2em',
-                    }} />
-                </div>
-            </div>
-            <h2 className="text-md font-medium"><List className="inline-block mr-2" />Your Lists</h2>
-            {isListsLoading && <Spinner></Spinner>}
-            {/* horizontal scrolling list, similar to index */}
-            {listsError && <p>Failed to load lists.</p>}
-            <div className="flex overflow-x-auto gap-4">
-                {listData?.results.map((list) => (
-                    <Link key={list.id} href={`/lists/${list.id}`}>
-                        <Card className="w-48">
-                            <CardHeader>{list.name}</CardHeader>
-                            <CardContent className="flex flex-col gap-2">
-                                <CardDescription>{list.description}</CardDescription>
-                                <div className="flex gap-2">
-                                    <Badge>{pluralize("item", list.item_count, true)}</Badge>
-                                    <Badge>{pluralize("favourites", list.favorite_count, true)}</Badge>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </Link>
-                ))}
-            </div>
-
-            {/* Watchlist Section */}
-            <h2 className="text-md font-medium">
-                <BinocularsIcon className="inline-block mr-2" />Watchlist
-            </h2>
-            {isWatchlistLoading && <Spinner />}
-            {watchlistError && <p>Failed to load watchlist.</p>}
-            <div className="flex flex-row gap-4 overflow-x-scroll overflow-y-clip">
-                {watchlistData?.results.slice(0, 10).map((item) => (
-                    <MovieCardHorizontal key={item.id} movie={item} />
-                ))}
-                <Link href="/watchlist">
-                    <div className="flex w-[150px] h-[321px] flex-col items-center justify-center shadow-md rounded-md overflow-hidden bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer">
-                        <ArrowRight className="w-8 h-8 text-gray-400" />
-                        <span className="text-gray-500 mt-2 font-semibold">See all</span>
+            <div className="flex flex-col gap-4">
+                <div className="flex flex-wrap items-center bg-accent gap-4 mx-[-32px] px-[32px] py-4">
+                    <Gravatar md5={accountData?.avatar.gravatar.hash}></Gravatar>
+                    <h1 className="text-xl">{accountData?.username}</h1>
+                    <div className="flex h-5 items-center space-x-4 text-sm">
+                        <span>#{accountData?.id}</span>
+                        <Separator orientation="vertical" className="h-6 w-px bg-border" />
+                        <ReactCountryFlag countryCode={accountData!.iso_3166_1} svg style={{
+                            width: '2em',
+                            height: '2em',
+                        }} />
+                        <Separator orientation="vertical" className="h-6 w-px bg-border" />
+                        <Button
+                            className="text-sm font-normal hover:cursor-pointer"
+                            onClick={handleLogout}
+                        >
+                            Logout
+                        </Button>
                     </div>
-                </Link>
-            </div>
-            <h2 className="text-md font-medium"><Star className="inline-block mr-2" />Rated Movies</h2>
-            {isRatedMoviesLoading && <Spinner></Spinner>}
-            {ratedMoviesError && <p>Failed to load rated movies.</p>}
-            <div className="flex flex-row gap-4 overflow-x-scroll overflow-y-clip">
-                {ratedMoviesData?.results.map((item) => (
-                    <MovieCardHorizontal key={item.id} movie={item} />
-                ))}
-            </div>
 
-            <h2 className="text-md font-medium"><Heart className="inline-block mr-2" />Favorite Movies</h2>
-            {isFavouriteMoviesLoading && <Spinner></Spinner>}
-            {favouriteMoviesError && <p>Failed to load favourite movies.</p>}
-            <div className="flex flex-row gap-4 overflow-x-scroll overflow-y-clip">
-                {favouriteMoviesData?.results.map((item) => (
-                    <MovieCardHorizontal key={item.id} movie={item} />
-                ))}
+                </div>
+                <h2 className="text-md font-medium"><List className="inline-block mr-2" /><Link href="/lists">Your Lists</Link></h2>
+                {isListsLoading && <Spinner></Spinner>}
+                {/* horizontal scrolling list, similar to index */}
+                {listsError && <p>Failed to load lists.</p>}
+                <div className="flex overflow-x-auto gap-4">
+                    {listData?.results.map((list) => (
+                        <Link key={list.id} href={`/lists/${list.id}`}>
+                            <Card className="w-48">
+                                <CardHeader>{list.name}</CardHeader>
+                                <CardContent className="flex flex-col gap-2">
+                                    <CardDescription>{list.description}</CardDescription>
+                                    <div className="flex gap-2">
+                                        <Badge>{pluralize("item", list.item_count, true)}</Badge>
+                                        <Badge>{pluralize("favourites", list.favorite_count, true)}</Badge>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </Link>
+                    ))}
+                </div>
+
+                {/* Watchlist Section */}
+                <h2 className="text-md font-medium">
+                    <BinocularsIcon className="inline-block mr-2" /><Link href="/watchlist">Watchlist</Link>
+                </h2>
+                {isWatchlistLoading && <Spinner />}
+                {watchlistError && <p>Failed to load watchlist.</p>}
+                <div className="flex flex-row gap-4 overflow-x-scroll overflow-y-clip">
+                    {watchlistData?.results.slice(0, 10).map((item) => (
+                        <MovieCardHorizontal key={item.id} movie={item} />
+                    ))}
+                    <Link href="/watchlist">
+                        <div className="flex w-[150px] h-[321px] flex-col items-center justify-center shadow-md rounded-md overflow-hidden bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer">
+                            <ArrowRight className="w-8 h-8 text-gray-400" />
+                            <span className="text-gray-500 mt-2 font-semibold">See all</span>
+                        </div>
+                    </Link>
+                </div>
+                <h2 className="text-md font-medium"><Star className="inline-block mr-2" /><Link href="/rated">Rated Movies</Link></h2>
+                {isRatedMoviesLoading && <Spinner></Spinner>}
+                {ratedMoviesError && <p>Failed to load rated movies.</p>}
+                <div className="flex flex-row gap-4 overflow-x-scroll overflow-y-clip">
+                    {ratedMoviesData?.results.map((item) => (
+                        <MovieCardHorizontal key={item.id} movie={item} />
+                    ))}
+                </div>
             </div>
         </>
     )
